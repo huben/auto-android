@@ -10,6 +10,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import org.auto.BuildConfig;
 import org.auto.util.LogUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +25,7 @@ import io.socket.emitter.Emitter;
 public class CmdService extends Service {
 
     public static String HANDLER_CLIENT = "HANDLER_CLIENT";
-    public static int ONLINE = 0;
+    public static int ONLINE = -2;
 
     public static String ACTICON_START_CMD_SERVICE = "ACTICON_START_CMD_SERVICE";
     public static String ACTICON_SEND_CMD = "ACTICON_SEND_CMD";
@@ -53,11 +54,11 @@ public class CmdService extends Service {
     public void onCreate() {
         super.onCreate();
         try {
-            socket = IO.socket("http://192.168.1.80:3000");
+            socket = IO.socket(BuildConfig.WEBSOCKET);
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-
+                    LogUtils.d("EVENT_CONNECT");
                 }
             });
             socket.on(HANDLER_CLIENT, new Emitter.Listener() {
@@ -77,6 +78,12 @@ public class CmdService extends Service {
                         } catch (JSONException e1) {
                             e1.printStackTrace();
                         }
+                }
+            });
+            socket.on("disconnect",new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    LogUtils.d("disconnect");
                 }
             });
             socket.connect();
@@ -105,6 +112,7 @@ public class CmdService extends Service {
             JSONObject obj = new JSONObject();
             obj.put("cmd", cmd);
             obj.put("text", text);
+            LogUtils.d(cmd + text);
             socket.emit(HANDLER_CLIENT, obj.toString(), new Ack() {
                 @Override
                 public void call(Object... args) {

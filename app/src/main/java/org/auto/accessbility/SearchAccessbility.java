@@ -1,20 +1,8 @@
 package org.auto.accessbility;
 
 import android.accessibilityservice.AccessibilityService;
-import android.content.Context;
-import android.view.KeyEvent;
-import android.view.accessibility.AccessibilityNodeInfo;
-import android.view.inputmethod.InputMethodManager;
-
-import org.auto.App;
-import org.auto.util.LogUtils;
 import org.auto.util.NodeUtil;
 import org.auto.util.WaitUtil;
-
-import java.util.List;
-
-import static android.view.KeyEvent.ACTION_UP;
-import static android.view.KeyEvent.KEYCODE_SEARCH;
 
 public class SearchAccessbility extends Accessbility {
 
@@ -38,9 +26,13 @@ public class SearchAccessbility extends Accessbility {
         WaitUtil.sleep(1000);
         NodeUtil.inputText(mService, msg);
         WaitUtil.sleep(1000);
-//        boolean  b = NodeUtil.clickNodeById(mService, "com.ss.android.ugc.aweme:id/cyf");
-//        LogUtils.d(b + "listview");
-        NodeUtil.clickListViewFirst(mService, "com.ss.android.ugc.aweme:id/cyf");
+        NodeUtil.clickRightBottom(mService);
+        WaitUtil.sleep(3000);
+        MainAccessbility.getInstance().swipeLeft(mService);
+        WaitUtil.sleep(2000);
+        MainAccessbility.getInstance().swipeLeft(mService);
+        WaitUtil.sleep(1000);
+        NodeUtil.clickListViewFirst(mService, "com.ss.android.ugc.aweme:id/ch7");
     }
 
     public void clickAvatar() {

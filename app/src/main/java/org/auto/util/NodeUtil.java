@@ -249,6 +249,44 @@ public class NodeUtil {
         }
     }
 
+    public static boolean clickRightBottom(AccessibilityService service) {
+        AccessibilityNodeInfo nodeInfo = service.getRootInActiveWindow();
+        if (nodeInfo != null) {
+            boolean isSuccess = false;
+                int width = ScreenUtils.getWindowsWidth(service) ;
+                int height = ScreenUtils.getWindowsHeight(service);
+                Rect rect = new Rect(width - 30, height - 30, width, height);
+//                Log.d(TAG, "clickNodeForTxt: left = "+rect.left);
+//                Log.d(TAG, "clickNodeForTxt: right = "+rect.right);
+//                Log.d(TAG, "clickNodeForTxt: top = "+rect.top);
+//                Log.d(TAG, "clickNodeForTxt: bottom = "+rect.bottom);
+                int x = rect.left + 10;
+                int y = rect.top + 10;
+                Path path = new Path();
+                path.moveTo(x, y);
+                GestureDescription.Builder builder = new GestureDescription.Builder();
+                GestureDescription gestureDescription = builder
+                        .addStroke(new GestureDescription.StrokeDescription(path, 0, 200))
+                        .build();
+                boolean b = service.dispatchGesture(gestureDescription, new AccessibilityService.GestureResultCallback() {
+                    @Override
+                    public void onCompleted(GestureDescription gestureDescription) {
+                        super.onCompleted(gestureDescription);
+                        Log.e("TIAOSHI###", "点击结束..." + gestureDescription.getStrokeCount());
+                    }
+
+                    @Override
+                    public void onCancelled(GestureDescription gestureDescription) {
+                        super.onCancelled(gestureDescription);
+                        Log.e("TIAOSHI###", "点击取消");
+                    }
+                }, null);
+            return isSuccess;
+        } else {
+            return false;
+        }
+    }
+
     public static boolean inputText(AccessibilityService service, String msg) {
         WaitUtil.sleep(500);
         AccessibilityNodeInfo node = service.findFocus(FOCUS_INPUT);

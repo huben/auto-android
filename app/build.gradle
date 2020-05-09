@@ -11,10 +11,24 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release {
+            keyAlias "123456"
+            keyPassword "123456"
+            storeFile file("../release.keystore")
+            storePassword "123456"
+        }
+    }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', 'WEBSOCKET', '"http://129.28.192.125:3000"'
+        }
+        debug {
+            buildConfigField 'String', 'WEBSOCKET', '"http://129.28.192.125:3000"'
+//            buildConfigField 'String', 'WEBSOCKET', '"http://192.168.1.80:3000"'
         }
     }
     compileOptions {

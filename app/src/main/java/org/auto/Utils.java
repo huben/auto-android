@@ -16,6 +16,7 @@ public class Utils {
         Intent intent = new Intent();
         ComponentName cn = new ComponentName(DOUYIN_PKG_NAME, DOUYIN_MAIN_ACTIVITY);
         intent.setComponent(cn);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ctx.startActivity(intent);
     }
 
